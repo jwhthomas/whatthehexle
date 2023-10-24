@@ -1,10 +1,11 @@
+const hexList = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
+
 function generateHexCode(amount){
-    const randomList = [0,1,2,3,4,5,6,7,8,9,"A","B","C","D","E","F"];
     var returnList = []
     for (let i = 0; i < amount; i++) {
         newCode = []
         for (let j = 0; j < 6; j++) {
-            newCode[j] = randomList[Math.floor(Math.random() * randomList.length)]
+            newCode[j] = hexList[Math.floor(Math.random() * hexList.length)]
         }
         returnList.push(newCode.join(""))
     }
@@ -30,7 +31,8 @@ function generateRow(rowNum){
         newInput.classList = "w-10 h-10 m-2 text-center uppercase"
         newInput.type = "text"
         newInput.id = `r${rowNum}t${i}`
-        newInput.oninput = ((e) => moveAlong(e, `r${rowNum}t${i}`))
+        // newInput.onkeydown =
+        newInput.onkeyup = ((e) => moveAlong(e, `r${rowNum}t${i}`))
         row.append(newInput)
     }
 }
@@ -40,8 +42,56 @@ generateRow(1)
 function moveAlong(event, elementID){
     const rowNum = elementID.split("r")[1].split("t")[0]
     const textNum = parseInt(elementID.split("t")[1])
-// IF BACKSPACE, move backwards instead!!!!
-    if(textNum === 5) return
+    const key = event.keyCode || event.charCode;
+    const element = document.getElementById(elementID)
 
+    //Enter key pressed
+    if(key === 13){
+        // NEXT ROW, CHECK GUESS HERE
+        checkGuess(rowNum)
+        return
+    }
+
+
+        //backspace handling, ignoring the first as you cannot go back from there
+    //also emptying the element you backspaced into unless moving back from text5
+    if(key === 8){
+        if(textNum === 0) return
+        var el = document.getElementById(`r${rowNum}t${textNum - 1}`)
+        // if(textNum !== 5){
+        //     el.value = ""
+        // }
+        el.focus();
+        return
+    }
+
+    // if not a hexidecimal value
+    
+    if(!hexList.includes(event.key.toUpperCase())){
+        //perhaps move this to onkeydown so it doesn't flicker
+        element.value = ""
+        return
+    }
+    //ENSURE THAT IF TYPED, IT IS ACTUALLY PUT IN THE ELEMENT
+    element.value = event.key.toUpperCase()
+
+    if(textNum === 5) return
     document.getElementById(`r${rowNum}t${textNum + 1}`).focus()
+}
+
+function checkGuess(rowNum){
+    const rowEl = document.getElementById("row"+rowNum)
+    const textEls = rowEl.children
+
+    console.log(textEls.length)
+    var userInput = []
+
+    //WHY WONT THIS FUCKING LOOP WORK>????????!!!!?!?!?!?
+    for (let j = 0; j < 7; j++) {
+        console.log(textEls[j].tagName)
+        if(textEls[j].tagName !== "INPUT") return
+        console.log(textEls[j].value)
+        userInput.push(textEls[j].value)
+    }
+    console.log(userInput)
 }
