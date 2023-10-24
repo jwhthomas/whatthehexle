@@ -14,7 +14,7 @@ function generateHexCode(amount){
 }
 
 const chosenHexCode = generateHexCode(1)
-
+console.log(chosenHexCode+" is the correct answer")
 document.getElementById("hexImageBlock").style.backgroundColor = "#"+chosenHexCode;
 
 function generateRow(rowNum){
@@ -38,6 +38,11 @@ function generateRow(rowNum){
 }
 
 generateRow(1)
+generateRow(2)
+generateRow(3)
+generateRow(4)
+generateRow(5)
+generateRow(6)
 
 function moveAlong(event, elementID){
     const rowNum = elementID.split("r")[1].split("t")[0]
@@ -83,15 +88,28 @@ function checkGuess(rowNum){
     const rowEl = document.getElementById("row"+rowNum)
     const textEls = rowEl.children
 
-    console.log(textEls.length)
     var userInput = []
 
-    //WHY WONT THIS FUCKING LOOP WORK>????????!!!!?!?!?!?
-    for (let j = 0; j < 7; j++) {
-        console.log(textEls[j].tagName)
-        if(textEls[j].tagName !== "INPUT") return
-        console.log(textEls[j].value)
-        userInput.push(textEls[j].value)
+    for (let i = 1; i < 7; i++) {
+        userInput.push(textEls[i].value)
     }
-    console.log(userInput)
+
+    if(userInput.includes("")) return
+
+    var answer = chosenHexCode[0].split("")
+
+    for (let i = 0; i < 6; i++){
+        document.getElementById(`r${rowNum}t${i}`).setAttribute("disabled", "true")
+        document.getElementById(`r${parseInt(rowNum) + 1}t0`).focus()
+        if(answer[i] === userInput[i]){
+            document.getElementById(`r${rowNum}t${i}`).classList.add("bg-green-500")
+            continue
+        }
+        if(answer.includes(userInput[i])){
+            document.getElementById(`r${rowNum}t${i}`).classList.add("bg-orange-500")
+            continue
+        }
+        document.getElementById(`r${rowNum}t${i}`).classList.add("bg-slate-500")
+    }
+
 }
