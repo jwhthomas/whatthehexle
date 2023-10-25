@@ -43,6 +43,12 @@ generateRow(3)
 generateRow(4)
 generateRow(5)
 generateRow(6)
+generateRow(7)
+generateRow(8)
+generateRow(9)
+generateRow(10)
+
+const rowNumCount = 10
 
 function moveAlong(event, elementID){
     const rowNum = elementID.split("r")[1].split("t")[0]
@@ -100,7 +106,9 @@ function checkGuess(rowNum){
 
     for (let i = 0; i < 6; i++){
         document.getElementById(`r${rowNum}t${i}`).setAttribute("disabled", "true")
+            if(parseInt(rowNum) !== rowNumCount){
         document.getElementById(`r${parseInt(rowNum) + 1}t0`).focus()
+            }
         if(answer[i] === userInput[i]){
             document.getElementById(`r${rowNum}t${i}`).classList.add("bg-green-500")
             continue
