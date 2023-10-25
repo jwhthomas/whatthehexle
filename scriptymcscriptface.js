@@ -43,6 +43,10 @@ generateRow(3)
 generateRow(4)
 generateRow(5)
 generateRow(6)
+generateRow(7)
+generateRow(8)
+generateRow(10)
+
 
 function moveAlong(event, elementID){
     const rowNum = elementID.split("r")[1].split("t")[0]
