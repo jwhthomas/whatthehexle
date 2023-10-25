@@ -14,7 +14,7 @@ function generateHexCode(amount){
 }
 
 const chosenHexCode = generateHexCode(1)
-#console.log(chosenHexCode+" is the correct answer")
+//console.log(chosenHexCode+" is the correct answer")
 document.getElementById("hexImageBlock").style.backgroundColor = "#"+chosenHexCode;
 
 function generateRow(rowNum){
