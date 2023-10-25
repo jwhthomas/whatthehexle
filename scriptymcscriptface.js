@@ -106,7 +106,7 @@ function checkGuess(rowNum){
 
     for (let i = 0; i < 6; i++){
         document.getElementById(`r${rowNum}t${i}`).setAttribute("disabled", "true")
-            if(rowNum !== rowNumCount){
+            if(parseInt(rowNum) !== rowNumCount){
         document.getElementById(`r${parseInt(rowNum) + 1}t0`).focus()
             }
         if(answer[i] === userInput[i]){
