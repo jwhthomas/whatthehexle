@@ -30,4 +30,28 @@
     </div>
 </body>
 <script src="./scriptymcscriptface.js"></script>
+<script src="./detectdevtools.js"></script>
+<script>
+    var storedBody;
+    window.addEventListener('devtoolschange', function (e) {
+        if(e.detail.open){
+            storedBody = document.body
+            document.body.remove()
+            document.documentElement.append(document.createElement('body'))
+            var x = document.createElement("h1")
+            x.innerHTML = "HEY!! No cheating!!!"
+            x.style.height = "100vh"
+            x.style.lineHeight = "100vh"
+            x.style.width = "100vw"
+            x.style.textAlign = "center"
+            x.style.fontSize = "2em"
+            x.style.color = "cyan"
+            document.body.append(x)
+            document.body.style.backgroundColor = "red"
+        }
+        if(!e.detail.open){
+            document.body = storedBody
+        }
+	});
+</script>
 </html>
