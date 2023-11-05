@@ -65,14 +65,20 @@ function moveAlong(event, elementID){
 
 
         //backspace handling, ignoring the first as you cannot go back from there
-    //also emptying the element you backspaced into unless moving back from text5
+    //if you backspace from an empty element, delete the prev one and stay in that box
     if(key === 8){
         if(textNum === 0) return
         var el = document.getElementById(`r${rowNum}t${textNum - 1}`)
-        // if(textNum !== 5){
-        //     el.value = ""
+
+        if(element.value === "" && textNum !== 5){
+            el.value = "";
+        }
+        if(textNum !== 5){
+            return el.focus();
+        }
+        // if(textNum === 5 && element.value === ""){
+        //     return el.focus();
         // }
-        el.focus();
         return
     }
 
