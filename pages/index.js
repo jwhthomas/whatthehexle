@@ -34,6 +34,9 @@ export default function Home(){
 
     var nextWriteElement = getNextEmptyElementInRow()
 
+    // If the key is pressed after all text has been inputted, ignore it
+    if(!nextWriteElement) return
+
     nextWriteElement.innerHTML = keyPressed
     
   }
@@ -56,11 +59,13 @@ export default function Home(){
 
     // Handle the pressing of the enter key
     if(keyPressed === "ENTER"){
-      // Ensure that all of the elements have a value in them
+      // Ensure that all of the elements have a value in them and also store each value into a list to compare later
       var rowBoxes = document.getElementById("row"+currentRow).children;
+      var userInput = []
       var hasFilledAllBoxes = true
       for (let i = 0; i < rowBoxes.length; i++) {
         if(!rowBoxes[i].innerHTML) hasFilledAllBoxes = false
+        userInput.push(rowBoxes[i].innerHTML)
       }
 
       if(!hasFilledAllBoxes){
@@ -68,7 +73,23 @@ export default function Home(){
         return
       }
 
-      
+      // Remove the hash from the list, which will be the first element of the list 
+      userInput.shift()
+
+      userInput.forEach((e, count) => {
+        // The value is in the correct place, it should be marked green
+        if(e === hexCode[count]){
+          document.getElementById("row"+currentRow+"box"+count).style.backgroundColor = "#00FF00"
+
+          // if(hexCode.includes(e)){
+          //   document.getElementById("row"+currentRow+"box"+count).style.backgroundColor = "#FFA500"
+          // }
+        }
+      })
+
+      // move to next row
+      // TODO: manage if this was the last row
+      currentRow++;
 
     }
   }
@@ -105,21 +126,30 @@ export default function Home(){
     // <div className="w-screen min-h-screen bg-slate-200" id="main">
     <div className="w-screen min-h-screen" id="main">
 
-      <div className="flex items-center justify-center h-32 w-full">
+      <div className="flex items-center justify-center w-full h-32">
         <h1 className={`text-5xl ${roboto.className} bg-slate-400 text-white py-4 px-4 rounded`}>What The Hexle?</h1>
       </div>
 
-      <div className="flex w-full justify-center">
-        <div className="bg-slate-400 p-10 rounded">
+      <div className="flex justify-center w-full">
+        <div className="p-10 rounded bg-slate-400">
           
           {/* <div className="flex justify-center w-full bg-red-200">
-          <div className="bg-green-500 w-10 h-10 rounded"></div>
+          <div className="w-10 h-10 bg-green-500 rounded"></div>
 
           </div> */}
 
 
           <Row rowNum={0} />
           <Row rowNum={1} />
+          <Row rowNum={2} />
+          <Row rowNum={3} />
+          <Row rowNum={4} />
+          <Row rowNum={5} />
+          <Row rowNum={6} />
+          <Row rowNum={7} />
+          <Row rowNum={8} />
+          <Row rowNum={9} />
+
         </div>
       </div>
 
