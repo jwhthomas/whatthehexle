@@ -76,15 +76,17 @@ export default function Home(){
       // Remove the hash from the list, which will be the first element of the list 
       userInput.shift()
 
+      var tempHoldingList = hexCode
+
       userInput.forEach((e, count) => {
         // The value is in the correct place, it should be marked green
         if(e === hexCode[count]){
-          document.getElementById("row"+currentRow+"box"+count).style.backgroundColor = "#00FF00"
-
-          // if(hexCode.includes(e)){
-          //   document.getElementById("row"+currentRow+"box"+count).style.backgroundColor = "#FFA500"
-          // }
+          return document.getElementById("row"+currentRow+"box"+count).style.backgroundColor = "#00FF00"
         }
+        if(hexCode.includes(userInput[count])){
+          return document.getElementById("row"+currentRow+"box"+count).style.backgroundColor = "#FFA500"
+        }
+        return document.getElementById("row"+currentRow+"box"+count).style.backgroundColor = "#808080" 
       })
 
       // move to next row
