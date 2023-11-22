@@ -1,6 +1,7 @@
 import Row from '@/components/row';
 import { useEffect } from 'react';
 import { Roboto } from 'next/font/google';
+import { useRouter } from 'next/router';
 
 const roboto = Roboto({
   weight: '400',
@@ -8,6 +9,7 @@ const roboto = Roboto({
 })
 
 export default function Home(){
+  const router = useRouter();
   // Always should hold the current row that is being typed into
   var currentRow = 0;
 
@@ -78,6 +80,8 @@ export default function Home(){
 
       var compareCode = hexCode.split("")
 
+      var correctCount = 0
+
       userInput.forEach((e, count) => {
         // The value is in the correct place, it should be marked green
 
@@ -86,6 +90,7 @@ export default function Home(){
         if(e === compareCode[count]){
           el.style.backgroundColor = "#00FF00"
           compareCode[count] = "Y"
+          correctCount++;
           return
         }
       })
@@ -93,7 +98,7 @@ export default function Home(){
       userInput.forEach((e, count) => {
         const el = document.getElementById(`row${currentRow}box${count}`)
         if(compareCode[count] === "Y") return
-        if(compareCode[count] === "X") return  el.style.backgroundColor = "#808080"
+        if(compareCode[count] === "X") return el.style.backgroundColor = "#808080"
         
         if(!compareCode.includes(userInput[count])){
           return el.style.backgroundColor = "#808080"
@@ -103,12 +108,18 @@ export default function Home(){
         }
       })
 
-      console.log(compareCode)
 
+      console.log(correctCount)
+      if(correctCount === 6){
+        // They have succeeded!!!!
+        return router.push("/win?ans="+hexCode)
+      }
+      if(currentRow === 9){
+        // They completed the last row, it should only get here if they have failed :(
+        return router.push("/lose?ans="+hexCode)
+      }
       // Move to next row
-      // TODO: manage if this was the last row
       currentRow++;
-
     }
   }
 
