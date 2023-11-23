@@ -111,8 +111,6 @@ export default function Home(){
         }
       })
 
-
-      console.log(correctCount)
       if(correctCount === 6){
         // They have succeeded!!!!
         return router.push("/win?ans="+hexCode)
@@ -157,7 +155,7 @@ export default function Home(){
       signInToKeycloak();
     } else {
       // User is already logged in, you can perform actions for authenticated users here
-      console.log('User is logged in.');
+      // console.log('User is logged in.');
     }
     
     window.addEventListener("keydown", keypressHandler)
@@ -182,8 +180,6 @@ export default function Home(){
   if(status === "authenticated"){
     return (
       <div className="w-screen min-h-screen" id="main">
-        <title>What The Hexle?</title>
-  
         <div className="flex items-center justify-center w-full h-32">
           <h1 className={`text-5xl ${roboto.className} bg-slate-400 text-white py-4 px-4 rounded`}>What The Hexle?</h1>
         </div>
