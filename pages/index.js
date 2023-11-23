@@ -171,47 +171,40 @@ export default function Home(){
     }
   })
 
-  if(status !== "authenticated"){
+  if(status === "unauthenticated"){
     return (
-      // Dummy blank page to appease my old code in useEffect()
-      <div className='invisible hidden'>
-        <div id="main"></div>
+      <body className='bg-slate-600'>
+        <div className='hidden' id='main'></div>
+      </body>
+    )
+  }
+
+  if(status === "authenticated"){
+    return (
+      <div className="w-screen min-h-screen" id="main">
+        <title>What The Hexle?</title>
+  
+        <div className="flex items-center justify-center w-full h-32">
+          <h1 className={`text-5xl ${roboto.className} bg-slate-400 text-white py-4 px-4 rounded`}>What The Hexle?</h1>
+        </div>
+  
+        <div className="flex justify-center w-full">
+          <div className="p-10 rounded bg-slate-400">
+            <Row rowNum={0} />
+            <Row rowNum={1} />
+            <Row rowNum={2} />
+            <Row rowNum={3} />
+            <Row rowNum={4} />
+            <Row rowNum={5} />
+            <Row rowNum={6} />
+            <Row rowNum={7} />
+            <Row rowNum={8} />
+            <Row rowNum={9} />
+          </div>
+        </div>
+  
       </div>
     )
   }
-  
-  return (
-    // <div className="w-screen min-h-screen bg-slate-200" id="main">
-    <div className="w-screen min-h-screen" id="main">
-      <title>What The Hexle?</title>
 
-      <div className="flex items-center justify-center w-full h-32">
-        <h1 className={`text-5xl ${roboto.className} bg-slate-400 text-white py-4 px-4 rounded`}>What The Hexle?</h1>
-      </div>
-
-      <div className="flex justify-center w-full">
-        <div className="p-10 rounded bg-slate-400">
-          
-          {/* <div className="flex justify-center w-full bg-red-200">
-          <div className="w-10 h-10 bg-green-500 rounded"></div>
-
-          </div> */}
-
-
-          <Row rowNum={0} />
-          <Row rowNum={1} />
-          <Row rowNum={2} />
-          <Row rowNum={3} />
-          <Row rowNum={4} />
-          <Row rowNum={5} />
-          <Row rowNum={6} />
-          <Row rowNum={7} />
-          <Row rowNum={8} />
-          <Row rowNum={9} />
-
-        </div>
-      </div>
-
-    </div>
-  )
 }
