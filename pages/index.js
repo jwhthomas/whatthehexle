@@ -2,6 +2,7 @@ import Row from '@/components/row';
 import { useEffect } from 'react';
 import { Roboto } from 'next/font/google';
 import { useRouter } from 'next/router';
+import { useSession, signIn, signOut } from "next-auth/react"
 
 const roboto = Roboto({
   weight: '400',
@@ -9,7 +10,9 @@ const roboto = Roboto({
 })
 
 export default function Home(){
+  const { data: session, status } = useSession()
   const router = useRouter();
+
   // Always should hold the current row that is being typed into
   var currentRow = 0;
 
@@ -140,6 +143,23 @@ export default function Home(){
   }
 
   useEffect(() => {
+    const signInToKeycloak = async () => {
+      await signIn('keycloak');
+    };
+
+    if (status === 'loading') {
+      // Session is being fetched, do nothing until it's ready
+      return;
+    }
+    
+    if (!session) {
+      // User is not logged in, redirect to Keycloak login
+      signInToKeycloak();
+    } else {
+      // User is already logged in, you can perform actions for authenticated users here
+      console.log('User is logged in.');
+    }
+    
     window.addEventListener("keydown", keypressHandler)
 
     // Set the background colour to the hex code to guess
@@ -151,6 +171,15 @@ export default function Home(){
     }
   })
 
+  if(status !== "authenticated"){
+    return (
+      // Dummy blank page to appease my old code in useEffect()
+      <div className='invisible hidden'>
+        <div id="main"></div>
+      </div>
+    )
+  }
+  
   return (
     // <div className="w-screen min-h-screen bg-slate-200" id="main">
     <div className="w-screen min-h-screen" id="main">
