@@ -141,22 +141,22 @@ export default function Home(){
   }
 
   useEffect(() => {
-    const signInToKeycloak = async () => {
-      await signIn('keycloak');
-    };
+    // const signInToKeycloak = async () => {
+    //   await signIn('keycloak');
+    // };
 
-    if (status === 'loading') {
-      // Session is being fetched, do nothing until it's ready
-      return;
-    }
+    // if (status === 'loading') {
+    //   // Session is being fetched, do nothing until it's ready
+    //   return;
+    // }
     
-    if (!session) {
-      // User is not logged in, redirect to Keycloak login
-      signInToKeycloak();
-    } else {
-      // User is already logged in, you can perform actions for authenticated users here
-      // console.log('User is logged in.');
-    }
+    // if (!session) {
+    //   // User is not logged in, redirect to Keycloak login
+    //   signInToKeycloak();
+    // } else {
+    //   // User is already logged in, you can perform actions for authenticated users here
+    //   // console.log('User is logged in.');
+    // }
     
     window.addEventListener("keydown", keypressHandler)
 
@@ -169,21 +169,22 @@ export default function Home(){
     }
   })
 
-  if(status === "unauthenticated"){
-    return (
-      <body className='bg-slate-600'>
-        <div className='hidden' id='main'></div>
-      </body>
-    )
-  }
+  // if(status === "unauthenticated"){
+  //   return (
+  //     <body className='bg-slate-600'>
+  //       <div className='hidden' id='main'></div>
+  //     </body>
+  //   )
+  // }
 
-  if(status === "authenticated"){
+  // if(status === "authenticated"){
     return (
       <div className="w-screen min-h-screen" id="main">
         <div className="flex items-center justify-center w-full h-32">
           <h1 className={`text-5xl ${roboto.className} bg-slate-400 text-white py-4 px-4 rounded`}>What The Hexle?</h1>
         </div>
-  
+        <p className="text-center text-red-500">auth disabled</p>
+
         <div className="flex justify-center w-full">
           <div className="p-10 rounded bg-slate-400">
             <Row rowNum={0} />
@@ -201,6 +202,6 @@ export default function Home(){
   
       </div>
     )
-  }
+  // }
 
 }
