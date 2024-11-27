@@ -22,6 +22,9 @@
     let boardGenerated = false;
 
     function generateGame() {
+      // Reset hexCode array
+      hexCode = [];
+
       // Generate a random hex color and sets it to the background of the body
       for (let i = 0; i < 6; i++) {
         hexCode.push(validChars[Math.floor(Math.random() * validChars.length)]);
@@ -31,6 +34,7 @@
 
       // Generate the game board
       const container = document.getElementById("gameContainer");
+      container.innerHTML = ''; // Clear previous game board
 
       for (let i = 0; i < 6; i++) {
         for (let j = 0; j < 6; j++) {
@@ -143,7 +147,7 @@
               if (value === hexCode[index]) {
                 document.getElementById(
                   "_" + row + "," + index
-                ).style.backgroundColor = "#4CAF50"; // Green
+                ).style.backgroundColor = "rgb(76, 175, 80)"; // Green
                 hexCodeCopy[index] = null;
               }
             });
@@ -151,7 +155,7 @@
             guessedCode.forEach((value, index) => {
               if (
                 document.getElementById("_" + row + "," + index).style
-                  .backgroundColor !== "#4CAF50"
+                  .backgroundColor !== "rgb(76, 175, 80)" // Green
               ) {
                 if (hexCodeCopy.includes(value)) {
                   document.getElementById(

@@ -33,6 +33,7 @@
             const grid = document.getElementById('grid');
 
             guesses.forEach((guess, index) => {
+                if(!guess) return;
                 var el = document.createElement('div');
                 el.className = "w-12 h-12 text-center text-2xl border border-gray-300 rounded";
                 el.style.backgroundColor = guess;
