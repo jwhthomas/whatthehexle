@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>What the Hexle?</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg">
+      <h1 class="text-3xl font-bold text-center mb-6">What the Hexle?</h1>
+      <div class="grid grid-cols-6 gap-2 gap-y-4 mb-4" id="gameContainer"></div>
+    </div>
+  </body>
+  <script>
+    var hexCode = [];
+    const validChars = "0123456789ABCDEF".split('');
+    let boardGenerated = false;
+
+    function generateGame() {
+      // Generate a random hex color and sets it to the background of the body
+      for (let i = 0; i < 6; i++) {
+        hexCode.push(validChars[Math.floor(Math.random() * validChars.length)]);
+      }
+
+      document.body.style.backgroundColor = "#" + hexCode.join("");
+
+      // Generate the game board
+      const container = document.getElementById("gameContainer");
+
+      for (let i = 0; i < 6; i++) {
+        for (let j = 0; j < 6; j++) {
+          var newInput = document.createElement("input");
+          newInput.type = "text";
+          newInput.maxLength = 1;
+          newInput.className =
+            "w-12 h-12 text-center text-2xl border border-gray-300 rounded focus:outline-none";
+          newInput.id = "_" + i + "," + j;
+          if (i !== 0) newInput.setAttribute("readonly", "true");
+          container.appendChild(newInput);
+        }
+      }
+      boardGenerated = true;
+    }
+
+    generateGame();
+
+    document.addEventListener("DOMContentLoaded", (event) => {
+      if (boardGenerated) {
+        mainGame();
+      } else {
+        const observer = new MutationObserver((mutations, observer) => {
+          if (boardGenerated) {
+            mainGame();
+            observer.disconnect();
+          }
+        });
+
+        observer.observe(document.getElementById("gameContainer"), {
+          childList: true,
+        });
+      }
+    });
+
+    function mainGame() {
+      document.getElementById("_0,0").focus();
+      document
+        .getElementById("gameContainer")
+        .addEventListener("input", function (event) {
+          if (event.target.tagName === "INPUT") {
+            var [row, col] = event.target.id.split("_")[1].split(",");
+            row = parseInt(row);
+            col = parseInt(col);
+
+            const value = event.target.value.toUpperCase();
+
+            if (!validChars.includes(value)) {
+              event.target.value = "";
+              return;
+            }
+
+            event.target.value = value;
+
+            if (col < 5) {
+              document.getElementById("_" + row + "," + (col + 1)).focus();
+            }
+          }
+        });
+
+      document
+        .getElementById("gameContainer")
+        .addEventListener("keydown", function (event) {
+          if (event.key === "Backspace") {
+            var [row, col] = document.activeElement.id.split("_")[1].split(",");
+            row = parseInt(row);
+            col = parseInt(col);
+            if (col === 5 && event.target.value.length === 1) return;
+
+            if (col === 0) return;
+            document.getElementById("_" + row + "," + (col - 1)).focus();
+          }
+
+          if (event.key === "Enter") {
+            var moveAndMark = true;
+
+            var [row, col] = document.activeElement.id.split("_")[1].split(",");
+            row = parseInt(row);
+            col = parseInt(col);
+
+            var guessedCode = [];
+            for (let i = 0; i < 6; i++) {
+              guessedCode.push(
+                document.getElementById("_" + row + "," + i).value
+              );
+            }
+
+            guessedCode.forEach((value) => {
+              if (!value || value.length !== 1) {
+                moveAndMark = false;
+              }
+            });
+
+            if (!moveAndMark) return
+            if (row !== 5) document.getElementById("_" + (row + 1) + "," + 0).focus();
+
+            guessedCode.forEach((value, index) => {
+              document
+                .getElementById("_" + row + "," + index)
+                .setAttribute("readonly", "true");
+              if (row !== 5)
+                document
+                  .getElementById("_" + (row + 1) + "," + index)
+                  .removeAttribute("readonly");
+            });
+
+            let hexCodeCopy = [...hexCode];
+
+            guessedCode.forEach((value, index) => {
+              if (value === hexCode[index]) {
+                document.getElementById(
+                  "_" + row + "," + index
+                ).style.backgroundColor = "#4CAF50"; // Green
+                hexCodeCopy[index] = null;
+              }
+            });
+
+            guessedCode.forEach((value, index) => {
+              if (
+                document.getElementById("_" + row + "," + index).style
+                  .backgroundColor !== "#4CAF50"
+              ) {
+                if (hexCodeCopy.includes(value)) {
+                  document.getElementById(
+                    "_" + row + "," + index
+                  ).style.backgroundColor = "#FFEB3B"; // Yellow
+                  hexCodeCopy[hexCodeCopy.indexOf(value)] = null;
+                } else {
+                  document.getElementById(
+                    "_" + row + "," + index
+                  ).style.backgroundColor = "#F44336"; // Red
+                }
+              }
+            });
+            if (guessedCode.join("") === hexCode.join("")) return win();
+            if (guessedCode.join("") !== hexCode.join("") && row === 5) return lose();
+          }
+        });
+    }
+
+    function win() {
+        const colors = [];
+        for (let i = 0; i < 6; i++) {
+            for (let j = 0; j < 6; j++) {
+                const cell = document.getElementById(`_${i},${j}`);
+                colors.push(cell.style.backgroundColor);
+            }
+        }
+        console.log(btoa(JSON.stringify(colors)));
+
+        // Redirect to the win page with the colors array
+        location.replace('/win.html?code=' + hexCode.join('') + '&guesses=' + btoa(JSON.stringify(colors)));
+    }
+
+    function lose() {
+        const colors = [];
+        for (let i = 0; i < 6; i++) {
+            for (let j = 0; j < 6; j++) {
+                const cell = document.getElementById(`_${i},${j}`);
+                colors.push(cell.style.backgroundColor);
+            }
+        }
+        console.log(btoa(JSON.stringify(colors)));
+
+        // Redirect to the lose page with the colors array
+        location.replace('/lose.html?code=' + hexCode.join('') + '&guesses=' + btoa(JSON.stringify(colors)));    }
+  </script>
+</html>

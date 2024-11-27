@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What The Hexle - Lose</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body id="body" class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md mx-auto bg-white p-8 rounded-lg shadow-lg text-center">
+        <h1 class="text-3xl font-bold mb-6">Sorry! You didn't guess the correct hex code.</h1>
+        <p class="text-xl mb-4">The correct hex code was: <span id="correctCode" class="font-bold"></span></p>
+        <div id="grid" class="grid grid-cols-6 gap-2 gap-y-4 mb-4"></div>
+        <button onclick="window.location.href='index.html'" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Try Again</button>
+    </div>
+
+    <script>
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                code: params.get('code'),
+                guesses: params.get('guesses')
+            };
+        }
+
+        function decodeGuesses(encodedGuesses) {
+            const decodedString = atob(encodedGuesses);
+            return JSON.parse(decodedString);
+        }
+
+        function createGrid(guesses) {
+            const grid = document.getElementById('grid');
+
+            guesses.forEach((guess, index) => {
+                var el = document.createElement('div');
+                el.className = "w-12 h-12 text-center text-2xl border border-gray-300 rounded";
+                el.style.backgroundColor = guess;
+                grid.appendChild(el);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const { code, guesses } = getQueryParams();
+            if (code) {
+                document.getElementById('body').style.backgroundColor = '#' + code;
+                document.getElementById('correctCode').textContent = '#' + code;
+            }
+            if (guesses) {
+                const decodedGuesses = decodeGuesses(guesses);
+                createGrid(decodedGuesses);
+            }
+        });
+    </script>
+</body>
+</html>
